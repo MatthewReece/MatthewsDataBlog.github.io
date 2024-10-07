@@ -1,0 +1,181 @@
+<!DOCTYPE HTML>
+<!--
+	Matthew Cocklereece, Data Blog
+-->
+<html>
+	<head>
+		<title>Matthew's Data Blog</title>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+		<link rel="stylesheet" href="assets/css/main.css" />
+	</head>
+	<body class="is-preload">
+
+		<!-- Wrapper -->
+			<div id="wrapper">
+
+				<!-- Main -->
+					<div id="main">
+						<div class="inner">
+
+							<!-- Header -->
+							<header id="header">
+								<a href="index.html" class="logo"><strong>Matthew's</strong> Data Blog</a>
+								<ul class="icons">
+									<li><a href="https://www.linkedin.com/in/matthew-cocklereece-189373102" class="icon brands fa-linkedin"><span class="label">LinkedIn</span></a></li>
+								</ul>
+							</header>
+
+							<!-- Content -->
+								<section>
+									<header class="main">
+										<h1>Python Demo</h1>
+									</header>
+
+									<h2>Exploring an E-commerce Dataset with Python and Pandas</h2>
+									
+
+									<p>In this post, I will demonstrate basic data exploration techniques using <strong>Pandas</strong> on a Jupyter notebook with an e-commerce dataset from Kaggle. You can access the dataset here: <a href="https://www.kaggle.com/jmmvutu/summer-products-and-sales-in-ecommerce-wish/" target="_blank">Kaggle: Summer Products and Sales in E-commerce</a>.</p>
+
+									<p>The Jupyter notebook for this analysis is available on my GitHub: <a href="https://github.com/MatthewReece/Aug2020_Summer_Products/blob/main/Summer%20Products%20Aug%202020%20Report.ipynb" target="_blank">Summer Products Report</a>.</p>
+
+									<p>After loading the dataset, we begin by examining its dimensions using <code>df.shape</code> and viewing the column names with <code>df.columns</code> to get a basic understanding of the data structure.</p>
+									
+									<span class="image main"><img src="images/project_images/cell-01.png" alt="" /></span>
+
+									<hr class="major" />
+
+									<p>This dataset contains 1,573 rows and 43 columns, so while it's not very large, it provides a great opportunity to explore some features using Pandas. The column names are what you'd typically expect from an e-commerce dataset. Let's take a closer look at the first few rows by using <code>df.head()</code>.</p>
+
+									<span class="image main"><img src="images/project_images/cell-02.png" alt="" /></span>
+
+									<hr class="major" />
+
+									<p>What I find interesting are the 'title' and 'title_orig' columns. The 'title' is mostly in French, while 'title_orig' is in English. Since I don’t know French, I focused on 'title_orig' and noticed that the titles are filled with keywords but lack categorization. For example, one row lists a pajama set, and another lists a dress. The dataset primarily consists of various types of apparel, all lumped together.</p>
+
+									<p>Considering this, the next step is to formulate research questions. Since this is an apparel e-commerce sales dataset, it seems logical to explore what specific products are being sold and determine which types of apparel are the best sellers. Additionally, the sample from the first five rows seems to feature women’s apparel, so it might be helpful to identify if there is both women’s and men’s apparel.</p>
+
+									<p>To better sort the styles of clothing, we will create a new column to categorize each product.</p>
+
+									<span class="image main"><img src="images/project_images/cell-03.png" alt="" /></span>
+									
+									<hr class="major" />
+
+									<p>This cell was quite long, so I had to break it up into separate screenshots. As you can see from the code, the process was carried out using a series of for loops and the regex search method.</p>
+
+									<p>First, I created a new column called 'clothing_type' and set the initial value of each product to the string 'None'. Then, I compiled a list of common apparel types such as 'shirts', 'dresses', 'tops', and others. The challenge is that there can be multiple keywords for the same apparel type. For example, there's the keyword 'top', but also 'blouse', which is another type of top.</p>
+
+									<p>As these keywords were added to the lists, the corresponding product was re-categorized from 'None' to the appropriate clothing type, such as 'top', 'skirt', or 'dress'. Afterward, I could examine the rows that still had 'None' in the 'clothing_type' column, look for keywords in the 'title_orig' that I might have missed, and add them to the lists. Eventually, all products were categorized, and 20 items were classified as ‘Not Apparel’ </p>
+
+									<span class="image main"><img src="images/project_images/cell-04.png" alt="" /></span>
+									<span class="image main"><img src="images/project_images/cell-05.png" alt="" /></span>
+
+									<hr class="major" />
+
+									<p>The next task was to sort men’s and women’s apparel, which was fairly simple and followed a similar approach to sorting clothing types. Again, there were multiple keywords to account for, such as 'man', 'male', or 'homme' for men’s apparel.</p>
+
+									<p>The value counts for the new 'mens-womens' column show the following results: 1,466 listings for women’s apparel, 87 for men’s, and 20 classified as non-apparel items.</p>
+
+									<span class="image main"><img src="images/project_images/cell-06.png" alt="" /></span>
+
+									<hr class="major" />
+
+									<p>It’s clear that this dataset primarily features listings for women’s apparel, but the question remains: how much revenue does each demographic category actually generate? Although there isn’t a column for ‘gross revenue’, we can easily calculate it using the data provided. By looping through each row and multiplying the ‘price’ by the ‘units_sold’, we can determine the gross revenue for each listing.</p>
+
+									<span class="image main"><img src="images/project_images/cell-07.png" alt="" /></span>
+								
+									<hr class="major" />
+									<p> Now that we have the gross revenue for each product we can sum the gross revenue for each demographic category.</p>
+									<span class="image main"><img src="images/project_images/cell-08.png" alt="" /></span>
+								
+									<hr class="major" />
+									<p>Clearly, the women’s demographic generated the most revenue, with over 53 million Euros, while the men’s demographic brought in nearly 1.5 million Euros. To put this into perspective, we can visualize the distribution with a pie chart.</p>
+									<span class="image main"><img src="images/project_images/cell-09.png" alt="" /></span>
+
+									<hr class="major" />
+									<p>Next, we can dive deeper into the dataset to identify the gross revenue for the top three products from each demographic. This can be done easily using the <code>.nlargest</code> method.</p>
+									<span class="image main"><img src="images/project_images/cell-10.png" alt="" /></span>
+
+									<hr class="major" />
+									<p>I looked up each row to identify the product type and added it to a table:</p>
+
+									<p><strong>Women’s apparel top 3 gross revenue in Euros:</strong><br>
+									214 - 800,000.0 (vest)<br>
+									401 - 750,000.0 (dress)<br>
+									1018 - 700,000.0 (top)</p>
+
+									<p><strong>Men’s apparel top 3 gross revenue in Euros:</strong><br>
+									1215 - 260,000.0 (overalls)<br>
+									1418 - 160,000.0 (top)<br>
+									244 - 95,000.0 (shorts)</p>
+
+									<p><strong>Non-apparel top 3 gross revenue in Euros:</strong><br>
+									1020 - 380,000.0 (kid’s pool float)<br>
+									404 - 24,000.0 (water toys)<br>
+									1341 - 10,000.0 (cellulite cream)</p>
+
+									<p>From this table, we can see that the third-highest item in women’s apparel is a top or shirt, which brought in 700,000 Euros, while the top item for men’s apparel is overalls, with a gross revenue of 260,000 Euros. The top-grossing non-apparel product is a kid’s pool float, bringing in 380,000 Euros; however, revenue drops sharply to 24,000 Euros for the next item.</p>
+
+									<p>This provides more insight into the dataset: it primarily features women’s apparel, with no men’s or non-apparel items significantly impacting the overall revenue. For further analysis, we could create separate data frames for men’s and women’s apparel. Creating subsets allows us to focus more deeply, while the 20 non-apparel items could be dropped based on stakeholder interests.</p>
+
+									<p>The next part of this analysis examines the gross revenue for each clothing type in the men’s and women’s apparel subsets. The code in the Jupyter notebook demonstrates how to create these subsets and calculate the total gross revenue for each clothing type.</p>
+
+									<span class="image main"><img src="images/project_images/cell-11.png" alt="" /></span>
+
+									<hr class="major" />
+
+									<p>Now that the gross revenues from each clothing type have been summed and sorted, creating a bar chart is straightforward. The following bar chart displays women’s apparel sorted by category, showing gross sales for each.</p>
+
+									<span class="image main"><img src="images/project_images/cell-12.png" alt="" /></span>
+
+									<hr class="major" />
+									<p>In summary, the women’s apparel data reveals that while vests were the top-selling individual item, tops and dresses brought in the highest overall revenue. For men’s apparel, the top-selling clothing type was bottoms, with overalls as the leading item in gross revenue. Another interesting insight is the popularity of ‘sets’—listings that bundle items like a shirt and shorts—which ranked sixth in women’s apparel revenue. This could provide valuable direction for targeted marketing strategies.</p>
+
+									<p>This basic exploration has provided a solid overview of the dataset’s composition, giving us insights into top-performing products and potential areas for further analysis, such as examining seller data or investigating trends in women’s tops. These findings serve as a foundation for deeper data-driven insights into e-commerce sales patterns.</p>
+
+									
+
+								</section>
+
+						</div>
+					</div>
+
+				<!-- Sidebar -->
+				<div id="sidebar">
+					<div class="inner">
+						<!-- Menu -->
+							<nav id="menu">
+								<header class="major">
+									<h2>Menu</h2>
+								</header>
+								<ul>
+									<li><a href="index.html">Homepage</a></li>
+									<li><a href="about.html">About</a></li>
+									
+								</ul>
+							</nav>
+
+						
+						<!-- Footer -->
+						<footer id="footer">
+							<p class="copyright">&copy; <span id="year"></span> All rights reserved.</p>
+						</footer>
+						
+						<script>
+							document.getElementById("year").textContent = new Date().getFullYear();
+						</script>
+
+					</div>
+				</div>
+
+			</div>
+
+		<!-- Scripts -->
+			<script src="assets/js/jquery.min.js"></script>
+			<script src="assets/js/browser.min.js"></script>
+			<script src="assets/js/breakpoints.min.js"></script>
+			<script src="assets/js/util.js"></script>
+			<script src="assets/js/main.js"></script>
+
+	</body>
+</html>

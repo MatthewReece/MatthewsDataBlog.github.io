@@ -1,0 +1,143 @@
+<!DOCTYPE HTML>
+<!--
+	Matthew Cocklereece, Data Blog
+-->
+<html>
+	<head>
+		<title>Matthew's Data Blog</title>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+		<link rel="stylesheet" href="assets/css/main.css" />
+	</head>
+	<body class="is-preload">
+
+		<!-- Wrapper -->
+			<div id="wrapper">
+
+				<!-- Main -->
+					<div id="main">
+						<div class="inner">
+
+							<!-- Header -->
+							<header id="header">
+								<a href="index.html" class="logo"><strong>Matthew's</strong> Data Blog</a>
+								<ul class="icons">
+									<li><a href="https://www.linkedin.com/in/matthew-cocklereece-189373102" class="icon brands fa-linkedin"><span class="label">LinkedIn</span></a></li>
+								</ul>
+							</header>
+
+							<!-- Content -->
+								<section>
+									<header class="main">
+										<h1>SQL Demo</h1>
+									</header>
+
+                                    <h2>Exploring Sales Data With SQL</h2>
+
+									<p>In this demo, I’m using the MySQL Public server with MySQL Workbench on a MacBook. The data used in this demo is basic sales data found on Kaggle: <a href="https://www.kaggle.com/datasets/knightbearr/sales-product-data" target="_blank">Sales Product Data</a>.</p>
+
+                                    <p>The import wizard in Workbench only imports one file at a time into a table, but the data came in 12 separate CSV files. To combine them, I used a simple shell script:</p>
+
+                                    <p><code>cd /folder/with/csv/files</code><br />
+                                    <code>cat *.csv > Sales_Data.csv</code></p>
+
+                                    <p>Here’s a first look at the data after it was imported into MySQL:</p>
+
+                                    <span class="image main"><img src="images/project_images/sql-01.png" alt="" /></span>
+
+									<hr class="major" />
+
+									<p>The dataset contains six columns: Order ID, Product, Quantity Ordered, Price Each, Order Date, and Purchase Address. Many of the column names include spaces, so it would be helpful to simplify the column names for easier querying and manipulation.</p>
+									
+                                    <span class="image main"><img src="images/project_images/sql-02.png" alt="" /></span>
+
+									<hr class="major" />
+
+									<p>When examining the Product column from the first query, it’s clear that many products are repeated across multiple orders. The question now is: how many unique products are there, and how many of each product were sold?</p>
+
+                                    <p>This simple query, using the <code>SUM</code> function and <code>GROUP BY</code> clause, shows 19 unique products and sums the total quantity sold for each product:</p>
+
+                                    <span class="image main"><img src="images/project_images/sql-03.png" alt="" /></span>
+
+
+									<hr class="major" />
+
+									<p>It may be useful to store the results of this query in a separate table called “Products.” Since we have the price and total quantity of sales for each product, we can also add another column to calculate the gross sales for each product.</p>
+
+                                    <p>However, an error kept occurring with the <code>GROUP BY</code> clause due to the default SQL mode. Fortunately, by referencing the error code, I was able to quickly find a solution and successfully create the new Products table:</p>
+
+                                    <span class="image main"><img src="images/project_images/sql-04.png" alt="" /></span>
+
+                                    <span class="image main"><img src="images/project_images/sql-05.png" alt="" /></span>    
+
+
+                                    <hr class="major" />
+
+									<p>Checking the new table confirms that it was created as expected. This new Products table provides valuable insights into which products generate the highest and lowest gross sales.</p>
+
+                                    <p>Next, from the sales table, the only customer-related information is a single address column. To make the data more useful, it would be beneficial to break the address into separate fields: street address, city, state, and zip code. This can be done using the <code>SUBSTRING_INDEX</code> and <code>SUBSTRING</code> functions built into MySQL.</p>
+
+                                    <span class="image main"><img src="images/project_images/sql-06.png" alt="" /></span>
+                                    
+
+                                    <hr class="major" />
+
+									<p>The previous query can now be stored in its own table called “Customers.” Normally, there would be a customer ID, but since the original sales table doesn’t include one, it makes sense to use the street address as the key. This key can refer back to the sales table, which contains order information.</p>
+
+                                    <span class="image main"><img src="images/project_images/sql-07.png" alt="" /></span>
+
+                                    <span class="image main"><img src="images/project_images/sql-08.png" alt="" /></span>
+
+
+                                    <hr class="major" />
+
+									<p>With just a few SQL queries, the data has been reorganized into separate tables for sales, products, and customers. Now, a <code>LEFT JOIN</code> can be used to aggregate the top 10 customers who spent the most money across multiple orders.</p>
+
+                                    <span class="image main"><img src="images/project_images/sql-09.png" alt="" /></span>
+
+                                    <p>This has been a short demo demonstrating some basic SQL skills on a random dataset I found on Kaggle. It shows how a simple dataset can be reorganized and reformatted to make it more useful for analysis. Thank you for checking out my demo!</p>    
+
+								</section>
+
+						</div>
+					</div>
+
+				<!-- Sidebar -->
+				<div id="sidebar">
+					<div class="inner">
+						<!-- Menu -->
+							<nav id="menu">
+								<header class="major">
+									<h2>Menu</h2>
+								</header>
+								<ul>
+									<li><a href="index.html">Homepage</a></li>
+									<li><a href="about.html">About</a></li>
+									
+								</ul>
+							</nav>
+
+						
+						<!-- Footer -->
+						<footer id="footer">
+							<p class="copyright">&copy; <span id="year"></span> All rights reserved.</p>
+						</footer>
+						
+						<script>
+							document.getElementById("year").textContent = new Date().getFullYear();
+						</script>
+
+					</div>
+				</div>
+
+			</div>
+
+		<!-- Scripts -->
+			<script src="assets/js/jquery.min.js"></script>
+			<script src="assets/js/browser.min.js"></script>
+			<script src="assets/js/breakpoints.min.js"></script>
+			<script src="assets/js/util.js"></script>
+			<script src="assets/js/main.js"></script>
+
+	</body>
+</html>
